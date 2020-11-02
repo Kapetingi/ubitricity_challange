@@ -1,6 +1,8 @@
 package com.ubitricity.carpark.controller;
 
 import com.ubitricity.carpark.api.CarApi;
+import com.ubitricity.carpark.exceptions.CarAlreadyRegistered;
+import com.ubitricity.carpark.exceptions.CarNotRegistered;
 import com.ubitricity.carpark.model.Car;
 import com.ubitricity.carpark.model.ParkingResponse;
 import com.ubitricity.carpark.service.ParkingService;
@@ -24,6 +26,8 @@ public class CarController implements CarApi {
         try {
             ParkingResponse parkingResponse = parkingService.parkCar(body.getCarId());
             return ResponseEntity.ok(parkingResponse);
+        } catch (CarAlreadyRegistered e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -34,6 +38,8 @@ public class CarController implements CarApi {
         try {
             ParkingResponse parkingResponse = parkingService.unparkCar(body.getCarId());
             return ResponseEntity.ok(parkingResponse);
+        } catch (CarNotRegistered e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -16,6 +16,7 @@ Is build as a Vue.js application
 To run application please use next command
 
 ```shell script
+mvn package
 mvn --projects backend spring-boot:run
 ```
 

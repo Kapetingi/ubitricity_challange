@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/report">Service</router-link>
+      <router-link to="/">Parking</router-link> |
+      <router-link to="/report">Report</router-link>
     </div>
     <router-view :hellomsg="msg"></router-view>
   </div>

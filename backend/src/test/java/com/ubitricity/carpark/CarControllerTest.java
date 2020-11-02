@@ -28,4 +28,54 @@ public class CarControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void parkCarTwice() throws Exception {
+        this.mockMvc
+                .perform(post("/car/park")
+                        .header("Accept", "application/json")
+                        .content("{\"car_id\":\"1\"}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc
+                .perform(post("/car/park")
+                        .header("Accept", "application/json")
+                        .content("{\"car_id\":\"1\"}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void unparkCar() throws Exception {
+        this.mockMvc
+                .perform(post("/car/park")
+                        .header("Accept", "application/json")
+                        .content("{\"car_id\":\"12\"}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc
+                .perform(post("/car/unpark")
+                        .header("Accept", "application/json")
+                        .content("{\"car_id\":\"12\"}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void unparkNotRegisteredCar() throws Exception {
+
+        this.mockMvc
+                .perform(post("/car/unpark")
+                        .header("Accept", "application/json")
+                        .content("{\"car_id\":\"19\"}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 }

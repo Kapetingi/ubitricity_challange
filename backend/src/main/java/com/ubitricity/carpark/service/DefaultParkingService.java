@@ -2,9 +2,13 @@ package com.ubitricity.carpark.service;
 
 import com.ubitricity.carpark.dao.ChargingPointDAO;
 import com.ubitricity.carpark.dao.ChargingPointRepository;
+import com.ubitricity.carpark.exceptions.CarAlreadyRegistered;
+import com.ubitricity.carpark.exceptions.CarNotRegistered;
 import com.ubitricity.carpark.model.ChargingPoint;
 import com.ubitricity.carpark.model.ParkingReport;
 import com.ubitricity.carpark.model.ParkingResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -21,7 +25,10 @@ public class DefaultParkingService implements ParkingService {
 
     private final Integer FAST_CHARGE_AMPERS = 20;
     private final Integer SLOW_CHARGE_AMPERS = 10;
+    private final String  OCCUPIED = "occupied";
+    private final String  AVAILABLE = "available";
 
+    private static final Logger log = LoggerFactory.getLogger(DefaultParkingService.class);
     private final ChargingPointRepository chargingPointRepository;
 
 
@@ -67,7 +74,7 @@ public class DefaultParkingService implements ParkingService {
         try {
             place.setAmpers(targetAmpers);
             place.setCarId(carId);
-            place.setStatus("occupied");
+            place.setStatus(OCCUPIED);
             place.setParkingTime(LocalDateTime.now());
             this.chargingPointRepository.save(place);
 
@@ -77,8 +84,8 @@ public class DefaultParkingService implements ParkingService {
             response.setCharingType(chargingType);
             response.setPlace("CP" + place.getId());
         } catch (DataIntegrityViolationException e) {
-            response.setStatus(ParkingResponse.StatusEnum.FAILURE);
-            response.setDescription("Car with this id is already registered on parking");
+            log.error("Car already registered on parking");
+            throw new CarAlreadyRegistered("Car already registered");
         }
         return response;
     }
@@ -88,13 +95,11 @@ public class DefaultParkingService implements ParkingService {
         ChargingPointDAO chargingPoint = this.chargingPointRepository.findByCarId(carId);
 
         if (chargingPoint == null) {
-            ParkingResponse parkingResponse = new ParkingResponse();
-            parkingResponse.setStatus(ParkingResponse.StatusEnum.FAILURE);
-            parkingResponse.setDescription("Car is not registered on parking");
-            return parkingResponse;
+            log.error("Car is not registered on parking");
+            throw new CarNotRegistered("Car is not registered on parking yet");
         }
 
-        chargingPoint.setStatus("available");
+        chargingPoint.setStatus(AVAILABLE);
         chargingPoint.setAmpers(null);
         chargingPoint.setCarId(null);
         this.chargingPointRepository.save(chargingPoint);
