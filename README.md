@@ -8,6 +8,8 @@ The project is consist of two maven modules
 ## Backend
 
 This is a simple spring boot application. For persistence we use H2 and spring jpa.
+API is available via swagger-ui `http://localhost:8081/swagger-ui.html`
+ 
 
 ## Frontend 
 
