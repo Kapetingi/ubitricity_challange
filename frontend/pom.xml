@@ -23,6 +23,16 @@
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>${frontend-maven-plugin.version}</version>
 				<executions>
+					<!-- remove previous installation -->
+					<execution>
+						<id>remove previous installation</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>run clean</arguments>
+						</configuration>
+					</execution>
 					<!-- Install our node and npm version to run npm/node scripts-->
 					<execution>
 						<id>install node and npm</id>

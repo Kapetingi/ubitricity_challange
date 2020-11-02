@@ -39,7 +39,7 @@ public class CarController implements CarApi {
             ParkingResponse parkingResponse = parkingService.unparkCar(body.getCarId());
             return ResponseEntity.ok(parkingResponse);
         } catch (CarNotRegistered e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

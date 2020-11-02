@@ -35,6 +35,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ParkingResponse"
+        400:
+          description: can't park car with id beacause it's already registered
         500:
           description: internal server error
 
@@ -57,6 +59,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ParkingResponse"
+        404:
+          description: can't find car with given id
         500:
           description: internal server error
 

@@ -76,6 +76,6 @@ public class CarControllerTest {
                         .content("{\"car_id\":\"19\"}")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 }

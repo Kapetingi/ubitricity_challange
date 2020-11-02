@@ -1,19 +1,21 @@
 # Ubitricity carpark service
 
-This service is provieds a simple application to manage a carpark ubi
-    
+This service is provides a simple application to manage a carpark ubi
+The project is consist of two maven modules
+* frontend
+* backend
 
 ## Backend
 
-Is build as a spring boot application
+This is a simple spring boot application. For persistence we use H2 and spring jpa.
 
-## Frontend
+## Frontend 
 
-Is build as a Vue.js application
+This is a Vue.js application. For sake of simplicity we use a vue-bootstrap
 
 ## How to run
 
-To run application please use next command
+To run application please use following command
 
 ```shell script
 mvn package

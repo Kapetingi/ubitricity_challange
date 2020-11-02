@@ -5,7 +5,7 @@
   "author": "Jonas Hecht <jonas.hecht@codecentric.de>",
   "private": true,
   "scripts": {
-    "clean": "rm -rf node_modules target",
+    "clean": "rm -rf node_modules target node",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },

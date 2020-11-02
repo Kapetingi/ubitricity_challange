@@ -7,6 +7,7 @@
         >
         <p> {{error}} </p>
     </b-alert>
+    <b-alert  :show="msgAvailable">{{msg}}</b-alert>
     <b-form v-on:submit.prevent="onSubmit" v-on:reset.prevent="onReset">
        <b-form-group
         id="input-group-1"
@@ -37,37 +38,41 @@ export default {
         car_id: ''
       },
       error: '',
-      errorAlert: false
+      errorAlert: false,
+      msgAvailable: false,
+      msg: ''
     }
   },
   methods: {
         onSubmit () {
           api.parkCar(this.form.car_id).then(response => {
               this.backendResponse = response.data;
-              if (this.backendResponse.status == 'failure') {
-                this.errorAlert = true;
-                this.error = this.backendResponse.description
-              } else {
-                this.errorAlert = false;
-              }
-
+              this.errorAlert = false;
+              this.msgAvailable = true;
+              this.msg = 'car parked successfully'
           })
           .catch(error => {
-            this.errors.push(error)
-          })
+                  this.msgAvailable = false;
+                  this.errorAlert = true;
+                  if(error.response.status == 400){
+                    this.error = 'Car with this id is already registered';
+                  }
+                }
+          )
         },
         onReset () {
           api.unparkCar(this.form.car_id).then(response => {
               this.backendResponse = response.data;
-               if (this.backendResponse.status == 'failure') {
-                  this.errorAlert = true;
-                  this.error = this.backendResponse.description
-              } else {
-                this.errorAlert = false;
-              }
+              this.errorAlert = false;
+              this.msgAvailable = true;
+              this.msg = "car unparked successfully"
           })
           .catch(error => {
-            this.errors.push(error)
+            this.errorAlert = true;
+            this.msgAvailable = false;
+            if(error.response.status == 404){
+              this.error = 'Car with this id is not found';
+            }
           })
         }
   }
