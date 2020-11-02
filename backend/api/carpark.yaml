@@ -1,0 +1,128 @@
+openapi: 3.0.1
+
+info:
+  title: Carpark Service
+  description: This is the carpark Service API
+  version: 0.1.0
+
+servers:
+  - url: https://carpark.ubitricity.com
+
+tags:
+  - name: parking
+    description: An API related parking car charging
+  - name: report
+    description: An API related report of parking charging situation
+
+paths:
+
+  /car/park:
+    post:
+      tags:
+        - parking
+      summary: Park a new car on charging
+      operationId: parkCar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Car"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParkingResponse"
+        500:
+          description: internal server error
+
+  /car/unpark:
+    post:
+      tags:
+        - parking
+      summary: Unpark car from charging
+      operationId: unparkCar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Car"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParkingResponse"
+        500:
+          description: internal server error
+
+  /report:
+    get:
+      tags:
+        - report
+      summary: Provides report about carpark
+      operationId: getReport
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParkingReport"
+
+components:
+  schemas:
+
+    ParkingResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: status of operation
+          enum:
+            - success
+            - failure
+        description:
+          type: string
+          description: description of problem if operation is not successfull
+        place:
+          type: string
+          description: the id of place where car should be parked
+        charing_type:
+          type: string
+          enum:
+            - fast
+            - slow
+
+    ChargingPoint:
+      type: object
+      properties:
+        id:
+          type: string
+          description: id of place
+        status:
+          type: string
+          enum:
+            - occupied
+            - available
+        ampers:
+          type: number
+          description: the amount of ampers
+
+    Car:
+      type: object
+      properties:
+        car_id:
+          type: string
+          description: id number of car
+
+
+    ParkingReport:
+      type: array
+      items:
+        $ref: "#/components/schemas/ChargingPoint"
+
